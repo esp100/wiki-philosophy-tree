@@ -2,6 +2,7 @@ from pyvis.network import Network
 import networkx as nx
 from IPython.display import HTML
 from src.node import Node
+from src.scrapping import all_the_ways_lead_to
 
 
 def add_to_tree(branch, tree=None):
@@ -50,7 +51,7 @@ def build_networkx_graph(node, G=None, level=0):
         
     return G
 
-def plot_tree_pyvis(root_node):
+def plot_tree(root_node):
     G = build_networkx_graph(root_node)
     
     net = Network(height="600px", width="100%", directed=True, notebook=True, cdn_resources='in_line')
@@ -99,3 +100,14 @@ def plot_tree_pyvis(root_node):
     }
     """)
     return HTML(net.generate_html())
+
+def leaf_page_to_graph(leaf_page, reset=False):
+
+    if reset or not hasattr(leaf_page_to_graph, "tree"):
+        leaf_page_to_graph.tree = None
+
+    path = all_the_ways_lead_to(leaf_page)
+    
+    leaf_page_to_graph.tree = add_to_tree(path, leaf_page_to_graph.tree)
+    
+    return plot_tree(leaf_page_to_graph.tree)
