@@ -1,3 +1,5 @@
 ipykernel
 requests
 beautifulsoup4
+pyvis
+networkx
