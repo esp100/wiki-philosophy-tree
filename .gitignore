@@ -220,3 +220,7 @@ __marimo__/
 #Other
 .DS_Store
 **/.DS_Store
+
+
+#Output files
+aux_tree.html

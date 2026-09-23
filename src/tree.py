@@ -1,6 +1,7 @@
 from pyvis.network import Network
 import networkx as nx
-from IPython.display import HTML
+from IPython.display import IFrame
+import base64
 from src.node import Node
 from src.scrapping import all_the_ways_lead_to
 
@@ -54,7 +55,12 @@ def build_networkx_graph(node, G=None, level=0):
 def plot_tree(root_node):
     G = build_networkx_graph(root_node)
     
-    net = Network(height="600px", width="100%", directed=True, notebook=True, cdn_resources='in_line')
+    net = Network(
+       height="600px", 
+       width="900px", 
+       directed=True, 
+       notebook=True, 
+       cdn_resources='remote')
     net.from_nx(G)
     
     for edge in net.edges:
@@ -99,7 +105,16 @@ def plot_tree(root_node):
       }
     }
     """)
-    return HTML(net.generate_html())
+    net.save_graph("aux_tree.html")
+    
+    with open("aux_tree.html", "r", encoding="utf-8") as f:
+        html_content = f.read()
+
+    b64_html = base64.b64encode(html_content.encode('utf-8')).decode('utf-8')
+    data_uri = f"data:text/html;charset=utf-8;base64,{b64_html}"
+    
+    return IFrame(src=data_uri, width="100%", height="620")
+    
 
 def leaf_page_to_graph(leaf_page, reset=False):
 
