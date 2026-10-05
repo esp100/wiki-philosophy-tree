@@ -2,6 +2,36 @@ import src.config as config
 import requests 
 from bs4 import BeautifulSoup 
 
+def valid_url(page):
+  if page.startswith(config.BASE_URL):  
+    try:
+      response = requests.get(page, headers=config.BASE_HEADERS)
+      response.raise_for_status()
+      if response.status_code == 200:
+        return True
+      else:
+        return False
+    except requests.exceptions.HTTPError as http_err:
+      print(f"HTTP error occurred validating url: {http_err}")
+      return False
+    except requests.exceptions.ConnectionError as conn_err:
+      print(f"Connection error occurred validating url: {conn_err}")
+      return False
+  else:
+    return False
+
+def trim_page(page):
+  if page.startswith(config.BASE_URL) and valid_url(page):
+    return page.split(config.BASE_URL)[-1]
+  elif valid_url(config.BASE_URL+page):
+    return page
+  else:
+    return None
+
+def random_starting_page():
+  response = requests.get(config.BASE_URL+config.RANDOM_FUNCTION_URI, headers=config.BASE_HEADERS)
+  return trim_page(response.url)
+
 
 def clean_html_parentheses(html_string):
   result = []
@@ -89,3 +119,6 @@ def all_the_ways_lead_to(starting_page):
       print("stoped before target")
       break
   return route
+
+def from_random_all_the_ways_lead_to():
+  return all_the_ways_lead_to(random_starting_page())

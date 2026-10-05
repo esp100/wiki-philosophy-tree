@@ -3,7 +3,7 @@ import networkx as nx
 from IPython.display import IFrame
 import base64
 from src.node import Node
-from src.scrapping import all_the_ways_lead_to
+from src.scrapping import all_the_ways_lead_to, from_random_all_the_ways_lead_to
 
 
 def add_to_tree(branch, tree=None):
@@ -116,12 +116,12 @@ def plot_tree(root_node):
     return IFrame(src=data_uri, width="100%", height="620")
     
 
-def leaf_page_to_graph(leaf_page, reset=False):
+def leaf_page_to_graph(leaf_page=None, reset=False):
 
     if reset or not hasattr(leaf_page_to_graph, "tree"):
         leaf_page_to_graph.tree = None
 
-    path = all_the_ways_lead_to(leaf_page)
+    path = all_the_ways_lead_to(leaf_page) if leaf_page else from_random_all_the_ways_lead_to()
     
     leaf_page_to_graph.tree = add_to_tree(path, leaf_page_to_graph.tree)
     
