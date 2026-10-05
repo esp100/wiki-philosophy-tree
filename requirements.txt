@@ -1,5 +1,6 @@
-ipykernel
-requests
-beautifulsoup4
-pyvis
-networkx
+ipykernel==7.4.0
+ipython==9.17.1
+requests==2.34.2
+beautifulsoup4==4.15.0
+pyvis==0.3.2
+networkx==3.6.1
